@@ -13,7 +13,7 @@ namespace Persistence.Context
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
-
+            this.Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
