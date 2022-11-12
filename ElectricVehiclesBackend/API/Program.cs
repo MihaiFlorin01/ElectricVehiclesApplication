@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using Persistence.Context;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+string? connectionString = builder.Configuration.GetConnectionString("ConnectionString");
+builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
