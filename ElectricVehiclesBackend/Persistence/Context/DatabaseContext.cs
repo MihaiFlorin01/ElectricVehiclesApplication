@@ -12,7 +12,7 @@ namespace Persistence.Context
         public DbSet<Rental>? Rentals { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
-        {
+        {           
             this.Database.EnsureCreated();
         }
 
