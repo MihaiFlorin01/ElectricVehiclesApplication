@@ -12,7 +12,7 @@ using Persistence.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221113094022_FirstMigration")]
+    [Migration("20221125204503_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,7 +43,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("bikes");
+                    b.ToTable("Bikes");
                 });
 
             modelBuilder.Entity("Domain.Entities.BikeType", b =>
@@ -65,7 +65,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("bike_types");
+                    b.ToTable("BikeTypes");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>
@@ -88,7 +88,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("customers");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Domain.Entities.Invoice", b =>
@@ -117,7 +117,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("invoices");
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("Domain.Entities.Rental", b =>
@@ -154,7 +154,32 @@ namespace Persistence.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("rentals");
+                    b.ToTable("Rentals");
+                });
+
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Password")
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("password");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int")
+                        .HasColumnName("role");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("username");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.Rental", b =>

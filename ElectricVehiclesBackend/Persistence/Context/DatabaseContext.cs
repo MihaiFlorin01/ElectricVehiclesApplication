@@ -10,10 +10,11 @@ namespace Persistence.Context
         public DbSet<Customer>? Customers { get; set; }
         public DbSet<Invoice>? Invoices { get; set; }
         public DbSet<Rental>? Rentals { get; set; }
+        public DbSet<User>? Users { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {           
-            this.Database.EnsureCreated();
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,12 +37,17 @@ namespace Persistence.Context
             modelBuilder.Entity<Invoice>().Property(x => x.NetAmount).HasColumnName("net_amount").HasColumnType("decimal(5, 2)");
             modelBuilder.Entity<Invoice>().Property(x => x.Paid).HasColumnName("paid");
 
-            modelBuilder.Entity<Rental>().Property(x => x.Id);
+            modelBuilder.Entity<Rental>().HasKey(x => x.Id);
             modelBuilder.Entity<Rental>().Property(x => x.BikeId).HasColumnName("bike_id").HasColumnType("int");
             modelBuilder.Entity<Rental>().Property(x => x.CustomerId).HasColumnName("customer_id").HasColumnType("int");
             modelBuilder.Entity<Rental>().Property(x => x.StartDateTime).HasColumnName("start_date_time").HasColumnType("datetime");
             modelBuilder.Entity<Rental>().Property(x => x.EndDateTime).HasColumnName("end_date_time").HasColumnType("datetime");
             modelBuilder.Entity<Rental>().Property(x => x.InvoiceId).HasColumnName("invoice_id").HasColumnType("int");
+
+            modelBuilder.Entity<User>().HasKey(x => x.Id);
+            modelBuilder.Entity<User>().Property(x => x.Username).HasColumnName("username").HasColumnType("varchar(200)");
+            modelBuilder.Entity<User>().Property(x => x.Password).HasColumnName("password").HasColumnType("varchar(200)");
+            modelBuilder.Entity<User>().Property(x => x.Role).HasColumnName("role");
 
             base.OnModelCreating(modelBuilder);
         }

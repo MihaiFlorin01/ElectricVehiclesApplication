@@ -10,21 +10,7 @@ namespace Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "bike_types",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    description = table.Column<string>(type: "varchar(200)", nullable: false),
-                    price_per_minute = table.Column<decimal>(type: "decimal(5,2)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_bike_types", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "bikes",
+                name: "Bikes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -34,11 +20,25 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_bikes", x => x.Id);
+                    table.PrimaryKey("PK_Bikes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "customers",
+                name: "BikeTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    description = table.Column<string>(type: "varchar(200)", nullable: false),
+                    price_per_minute = table.Column<decimal>(type: "decimal(5,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BikeTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -48,11 +48,11 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_customers", x => x.Id);
+                    table.PrimaryKey("PK_Customers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "invoices",
+                name: "Invoices",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -64,11 +64,26 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_invoices", x => x.Id);
+                    table.PrimaryKey("PK_Invoices", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "rentals",
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    username = table.Column<string>(type: "varchar(200)", nullable: true),
+                    password = table.Column<string>(type: "varchar(200)", nullable: true),
+                    role = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rentals",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -81,48 +96,51 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_rentals", x => x.Id);
+                    table.PrimaryKey("PK_Rentals", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_rentals_bikes_bike_id",
+                        name: "FK_Rentals_Bikes_bike_id",
                         column: x => x.bike_id,
-                        principalTable: "bikes",
+                        principalTable: "Bikes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_rentals_customers_customer_id",
+                        name: "FK_Rentals_Customers_customer_id",
                         column: x => x.customer_id,
-                        principalTable: "customers",
+                        principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_rentals_bike_id",
-                table: "rentals",
+                name: "IX_Rentals_bike_id",
+                table: "Rentals",
                 column: "bike_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_rentals_customer_id",
-                table: "rentals",
+                name: "IX_Rentals_customer_id",
+                table: "Rentals",
                 column: "customer_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "bike_types");
+                name: "BikeTypes");
 
             migrationBuilder.DropTable(
-                name: "invoices");
+                name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "rentals");
+                name: "Rentals");
 
             migrationBuilder.DropTable(
-                name: "bikes");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "customers");
+                name: "Bikes");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
         }
     }
 }
