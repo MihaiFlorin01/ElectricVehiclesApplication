@@ -55,6 +55,10 @@ namespace API.Controllers
         public async Task<ActionResult<UserForView>> UpdateUser(UserForUpdate userForUpdate)
         {
             var userEntity = _mapper.Map<User>(userForUpdate);
+            if (userEntity.Id <= 0)
+            {
+                return BadRequest();
+            }
             _userRepository.UpdateUser(userEntity);
             await _userRepository.SaveChangesAsync();
             var userToReturn = _mapper.Map<UserForView>(userEntity);

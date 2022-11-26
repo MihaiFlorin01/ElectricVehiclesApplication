@@ -54,6 +54,10 @@ namespace API.Controllers
         public async Task<ActionResult<BikeForView>> UpdateBike(BikeForUpdate bikeForUpdate)
         {
             var bikeEntity = _mapper.Map<Bike>(bikeForUpdate);
+            if (bikeEntity.Id <= 0)
+            {
+                return BadRequest();
+            }
             _bikeRepository.UpdateBike(bikeEntity);
             await _bikeRepository.SaveChangesAsync();
             var bikeToReturn = _mapper.Map<BikeForView>(bikeEntity);
