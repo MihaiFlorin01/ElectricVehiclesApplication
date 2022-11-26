@@ -10,7 +10,7 @@ namespace Persistence.Repositories.BikeTypeRepository
 
         public BikeTypeRepository(DatabaseContext? databaseContext)
         {
-            _databaseContext = databaseContext;
+            _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
         }
 
         public async Task<IEnumerable<BikeType>> GetBikeTypesAsync()
