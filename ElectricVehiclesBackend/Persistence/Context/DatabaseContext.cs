@@ -47,6 +47,7 @@ namespace Persistence.Context
             modelBuilder.Entity<User>().HasKey(x => x.Id);
             modelBuilder.Entity<User>().Property(x => x.Username).HasColumnName("username").HasColumnType("varchar(200)");
             modelBuilder.Entity<User>().Property(x => x.Password).HasColumnName("password").HasColumnType("varchar(200)");
+            modelBuilder.Entity<User>().Property(x => x.Email).HasColumnName("email").HasColumnType("varchar(200)");
             modelBuilder.Entity<User>().Property(x => x.Role).HasColumnName("role");
 
             base.OnModelCreating(modelBuilder);
