@@ -10,7 +10,7 @@ namespace Persistence.Repositories.BikeRepositories
 
         public BikeRepository(DatabaseContext? databaseContext)
         {
-            _databaseContext = databaseContext;
+            _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
         }
 
         public async Task<IEnumerable<Bike>> GetBikesAsync()
@@ -33,9 +33,8 @@ namespace Persistence.Repositories.BikeRepositories
             _databaseContext?.Update(bike);
         }
 
-        public void DeleteBike(int id)
+        public void DeleteBike(Bike bike)
         {
-            var bike = GetBikeByIdAsync(id).Result;
             _databaseContext?.Remove(bike);
         }
 

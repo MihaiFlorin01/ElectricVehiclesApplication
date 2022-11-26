@@ -1,9 +1,4 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence.Repositories.UserRepository
 {
@@ -17,7 +12,7 @@ namespace Persistence.Repositories.UserRepository
 
         void UpdateUser(User user);
 
-        void DeleteUser(int id);
+        void DeleteUser(User user);
 
         Task<bool> SaveChangesAsync();
     }

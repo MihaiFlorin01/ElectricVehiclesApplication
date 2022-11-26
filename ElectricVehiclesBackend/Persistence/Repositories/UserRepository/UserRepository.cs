@@ -1,11 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence.Repositories.UserRepository
 {
@@ -15,7 +10,7 @@ namespace Persistence.Repositories.UserRepository
 
         public UserRepository(DatabaseContext? databaseContext)
         {
-            _databaseContext = databaseContext;
+            _databaseContext = databaseContext ?? throw new ArgumentNullException(nameof(databaseContext));
         }
 
         public async Task<IEnumerable<User>> GetUsersAsync()
@@ -38,9 +33,8 @@ namespace Persistence.Repositories.UserRepository
             _databaseContext?.Update(user);
         }
 
-        public void DeleteUser(int id)
+        public void DeleteUser(User user)
         {
-            var user = GetUserByIdAsync(id).Result;
             _databaseContext?.Remove(user);
         }
 

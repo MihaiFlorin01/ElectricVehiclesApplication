@@ -1,9 +1,4 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Persistence.Repositories.BikeRepositories
 {
@@ -17,7 +12,7 @@ namespace Persistence.Repositories.BikeRepositories
         
         void UpdateBike(Bike bike);
         
-        void DeleteBike(int id);
+        void DeleteBike(Bike bike);
         
         Task<bool> SaveChangesAsync();
     }
