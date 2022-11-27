@@ -17,6 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dtos\Dtos.csproj" />
+    <ProjectReference Include="..\Mappers\Mappers.csproj" />
     <ProjectReference Include="..\Persistence\Infrastructure.csproj" />
   </ItemGroup>
 
