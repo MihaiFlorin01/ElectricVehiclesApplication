@@ -1,7 +1,7 @@
 using API.Extensions;
 using API.Profiles;
+using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 

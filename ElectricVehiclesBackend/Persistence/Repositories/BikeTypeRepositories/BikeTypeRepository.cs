@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
+using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using Persistence.Context;
 
 namespace Persistence.Repositories.BikeTypeRepository
 {
@@ -15,32 +15,32 @@ namespace Persistence.Repositories.BikeTypeRepository
 
         public async Task<IEnumerable<BikeType>> GetBikeTypesAsync()
         {
-            return await _databaseContext?.BikeTypes.ToListAsync();
+            return await _databaseContext.BikeTypes.ToListAsync();
         }
 
         public async Task<BikeType> GetBikeTypeByIdAsync(int id)
         {
-            return await _databaseContext?.BikeTypes.FirstOrDefaultAsync(x => x.Id == id);
+            return await _databaseContext.BikeTypes.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public void AddBikeType(BikeType bikeType)
         {
-            _databaseContext?.Add(bikeType);
+            _databaseContext.Add(bikeType);
         }
 
         public void UpdateBikeType(BikeType bikeType)
         {
-            _databaseContext?.Update(bikeType);
+            _databaseContext.Update(bikeType);
         }
 
         public void DeleteBikeType(BikeType bikeType)
         {
-            _databaseContext?.Remove(bikeType);
+            _databaseContext.Remove(bikeType);
         }
 
         public async Task<bool> SaveChangesAsync()
         {
-            return await _databaseContext?.SaveChangesAsync() > 0;
+            return await _databaseContext.SaveChangesAsync() > 0;
         }
     }
 }

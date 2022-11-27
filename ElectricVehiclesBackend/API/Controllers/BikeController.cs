@@ -77,7 +77,6 @@ namespace API.Controllers
             await _bikeRepository.SaveChangesAsync();
 
             return Ok(_mapper.Map<BikeForView>(bike));
-
         }
     }
 }

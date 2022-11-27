@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Persistence.Context
+namespace Infrastructure.Context
 {
     public class DatabaseContext : DbContext
     {
@@ -13,7 +13,7 @@ namespace Persistence.Context
         public DbSet<User>? Users { get; set; }
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
-        {           
+        {
 
         }
 

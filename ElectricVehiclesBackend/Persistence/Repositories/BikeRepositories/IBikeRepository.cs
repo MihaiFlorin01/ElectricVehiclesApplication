@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 
-namespace Persistence.Repositories.BikeRepositories
+namespace Infrastructure.Repositories.BikeRepositories
 {
     public interface IBikeRepository
     {
