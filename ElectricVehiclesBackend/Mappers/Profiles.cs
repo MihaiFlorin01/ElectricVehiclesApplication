@@ -8,7 +8,9 @@ namespace Mappers
     {
         public Profiles()
         {
-            CreateMap<Bike, BikeDto>().ReverseMap();
+            CreateMap<Bike, ViewBikeDto>().ReverseMap();
+            CreateMap<Bike, CreateBikeDto>().ReverseMap();
+            CreateMap<Bike, UpdateBikeDto>().ReverseMap();
         }
     }
 }
