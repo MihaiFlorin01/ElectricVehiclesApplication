@@ -23,8 +23,7 @@ namespace API.Controllers
         //[ProducesResponseType(typeof(IEnumerable<BikeDto>), 200)]
         public async Task<ActionResult<IEnumerable<ViewBikeDto>>> GetBikes()
         {
-            var bikes = await _unitOfWork.GetRepository<Bike>().
-                GetAllAsync();
+            var bikes = await _unitOfWork.GetRepository<Bike>().GetAllAsync();
 
             return Ok(_mapper.Map<IEnumerable<ViewBikeDto>>(bikes.Where(x => x.IsDeleted == false)));
         }

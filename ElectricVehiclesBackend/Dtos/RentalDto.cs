@@ -2,7 +2,7 @@
 {
     public class RentalDto
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int BikeId { get; set; }
         public BikeDto? Bike { get; set; }
         public int CustomerId { get; set; }

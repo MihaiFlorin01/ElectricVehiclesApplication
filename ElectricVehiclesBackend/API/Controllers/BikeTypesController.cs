@@ -1,83 +1,82 @@
-﻿//using AutoMapper;
-//using Domain.Entities;
-//using Domain.Models.BikeModels;
-//using Domain.Models.BikeTypeModels;
-//using Microsoft.AspNetCore.Mvc;
-//using Persistence.Repositories.BikeTypeRepository;
+﻿using Abstractions;
+using AutoMapper;
+using Dtos;
+using Microsoft.AspNetCore.Mvc;
+using Models;
 
-//namespace API.Controllers
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class BikeTypesController : ControllerBase
-//    {
-//        private readonly IBikeTypeRepository _bikeTypeRepository;
-//        private readonly IMapper _mapper;
+namespace API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class BikeTypesController : ControllerBase
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-//        public BikeTypesController(IBikeTypeRepository bikeTypeRepository, IMapper mapper)
-//        {
-//            _bikeTypeRepository= bikeTypeRepository ?? throw new ArgumentNullException(nameof(bikeTypeRepository));
-//            _mapper= mapper ?? throw new ArgumentNullException(nameof(_mapper));
-//        }
+        public BikeTypesController(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(_mapper));
+        }
 
-//        [HttpGet]
-//        public async Task<ActionResult<IEnumerable<BikeTypeForView>>> GetBikeTypes()
-//        {
-//            var bikeTypes = await _bikeTypeRepository.GetBikeTypesAsync();
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ViewBikeTypeDto>>> GetBikeTypes()
+        {
+            var bikeTypes = await _unitOfWork.GetRepository<BikeType>().GetAllAsync();
 
-//            return Ok(_mapper.Map<IEnumerable<BikeTypeForView>>(bikeTypes));
-//        }
+            return Ok(_mapper.Map<IEnumerable<ViewBikeTypeDto>>(bikeTypes.Where(x =>x.IsDeleted == false)));
+        }
 
-//        [HttpGet("{id}", Name = "GetBikeTypeById")]
-//        public async Task<ActionResult<BikeTypeForView>> GetBikeTypeById(int id)
-//        {
-//            var bikeType = await _bikeTypeRepository.GetBikeTypeByIdAsync(id);
-//            if (bikeType == null)
-//            {
-//                return NotFound();
-//            }
-//            return Ok(_mapper.Map<BikeTypeForView>(bikeType));
-//        }
+        [HttpGet("{id}", Name = "GetBikeTypeById")]
+        public async Task<ActionResult<ViewBikeTypeDto>> GetBikeTypeById(long id)
+        {
+            var bikeType = await _unitOfWork.GetRepository<BikeType>().GetByIdAsync(id);
+            if (bikeType == null || bikeType.IsDeleted == true)
+            {
+                return NotFound();
+            }
+            return Ok(_mapper.Map<ViewBikeTypeDto>(bikeType));
+        }
 
-//        [HttpPost]
-//        public async Task<ActionResult<BikeTypeForView>> AddBikeType(BikeTypeForCreation bikeTypeForCreation)
-//        {
-//            var bikeTypeEntity = _mapper.Map<BikeType>(bikeTypeForCreation);
-//            _bikeTypeRepository.AddBikeType(bikeTypeEntity);
-//            await _bikeTypeRepository.SaveChangesAsync();
-//            var bikeTypeToReturn = _mapper.Map<BikeTypeForView>(bikeTypeEntity);
+        [HttpPost]
+        public async Task<ActionResult<ViewBikeTypeDto>> AddBikeType(CreateBikeTypeDto createBikeTypeDto)
+        {
+            var bikeTypeEntity = _mapper.Map<BikeType>(createBikeTypeDto);
+            _unitOfWork.GetRepository<BikeType>().Add(bikeTypeEntity);
+            await _unitOfWork.SaveChangesAsync();
+            var bikeTypeToReturn = _mapper.Map<CreateBikeTypeDto>(bikeTypeEntity);
 
-//            return CreatedAtRoute("GetBikeTypeById", new { id = bikeTypeEntity.Id }, bikeTypeToReturn);
-//        }
+            return CreatedAtRoute("GetBikeTypeById", new { id = bikeTypeEntity.Id }, bikeTypeToReturn);
+        }
 
-//        [HttpPut]
-//        public async Task<ActionResult<BikeTypeForView>> UpdateBikeType(BikeTypeForUpdate bikeTypeForUpdate)
-//        {
-//            var bikeTypeEntity = _mapper.Map<BikeType>(bikeTypeForUpdate);
-//            if (bikeTypeEntity.Id <= 0)
-//            {
-//                return BadRequest();
-//            }
-//            _bikeTypeRepository.UpdateBikeType(bikeTypeEntity);
-//            await _bikeTypeRepository.SaveChangesAsync();
-//            var bikeTypeToReturn = _mapper.Map<BikeTypeForView>(bikeTypeEntity);
+        [HttpPut]
+        public async Task<ActionResult<ViewBikeTypeDto>> UpdateBikeType(UpdateBikeTypeDto updateBikeTypeDto)
+        {
+            var bikeTypeEntity = _mapper.Map<BikeType>(updateBikeTypeDto);
+            if (bikeTypeEntity.Id <= 0)
+            {
+                return BadRequest();
+            }
+            _unitOfWork.GetRepository<BikeType>().Update(bikeTypeEntity);
+            await _unitOfWork.SaveChangesAsync();
+            var bikeTypeToReturn = _mapper.Map<ViewBikeTypeDto>(bikeTypeEntity);
 
-//            return Ok(bikeTypeToReturn);
-//        }
+            return Ok(bikeTypeToReturn);
+        }
 
-//        [HttpDelete("{id}")]
-//        public async Task<ActionResult<BikeTypeForView>> DeleteBikeType(int id)
-//        {
-//            var bikeType = await _bikeTypeRepository.GetBikeTypeByIdAsync(id);
-//            if (bikeType == null)
-//            {
-//                return NotFound();
-//            }
-//            _bikeTypeRepository.DeleteBikeType(bikeType);
-//            await _bikeTypeRepository.SaveChangesAsync();
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ViewBikeTypeDto>> DeleteBikeType(int id)
+        {
+            var bikeType = await _unitOfWork.GetRepository<BikeType>().GetByIdAsync(id);
+            if (bikeType == null)
+            {
+                return NotFound();
+            }
+            await _unitOfWork.GetRepository<BikeType>().DeleteByIdAsync(bikeType.Id);
+            await _unitOfWork.SaveChangesAsync();
 
-//            return Ok(_mapper.Map<BikeTypeForView>(bikeType));
+            return Ok(_mapper.Map<ViewBikeTypeDto>(bikeType));
 
-//        }
-//    }
-//}
+        }
+    }
+}
