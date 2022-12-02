@@ -1,4 +1,4 @@
-﻿namespace Dtos
+﻿namespace Dtos.BikeDtos
 {
     public class UpdateBikeDto
     {

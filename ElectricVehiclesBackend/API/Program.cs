@@ -1,7 +1,8 @@
-using Infrastructure;
 using Mappers;
 using Microsoft.EntityFrameworkCore;
 using Abstractions;
+using Infrastructure.GenericRepository;
+using Infrastructure.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
 ﻿using Abstractions;
 using AutoMapper;
-using Dtos;
+using Dtos.UserDtos;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 

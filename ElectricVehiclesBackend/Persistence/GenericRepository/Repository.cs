@@ -1,7 +1,8 @@
 ﻿using Abstractions;
+using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure
+namespace Infrastructure.GenericRepository
 {
     public class Repository<T> : IRepository<T> where T : BaseEntityModel
     {

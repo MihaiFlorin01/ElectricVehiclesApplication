@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using Dtos;
+using Dtos.BikeDtos;
+using Dtos.BikeTypeDtos;
+using Dtos.UserDtos;
 using Models;
 
 namespace Mappers

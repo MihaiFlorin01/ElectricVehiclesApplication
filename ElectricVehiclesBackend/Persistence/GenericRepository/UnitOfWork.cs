@@ -1,8 +1,9 @@
 ﻿
 
 using Abstractions;
+using Infrastructure.Context;
 
-namespace Infrastructure
+namespace Infrastructure.GenericRepository
 {
     public class UnitOfWork : IUnitOfWork
     {
