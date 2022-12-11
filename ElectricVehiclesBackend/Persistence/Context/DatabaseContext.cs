@@ -45,9 +45,8 @@ namespace Infrastructure.Context
             modelBuilder.Entity<Rental>().Property(x => x.InvoiceId).IsRequired();
 
             modelBuilder.Entity<User>().HasKey(x => x.Id);
-            modelBuilder.Entity<User>().Property(x => x.Username).HasMaxLength(200).IsRequired();
-            modelBuilder.Entity<User>().Property(x => x.Password).HasMaxLength(200).IsRequired();
             modelBuilder.Entity<User>().Property(x => x.Email).HasMaxLength(200).IsRequired();
+            modelBuilder.Entity<User>().Property(x => x.Password).HasMaxLength(200).IsRequired();
             modelBuilder.Entity<User>().Property(x => x.Role).HasMaxLength(200).IsRequired();
 
             base.OnModelCreating(modelBuilder);
