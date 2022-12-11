@@ -7,12 +7,13 @@
             <span *ngIf="loginForm.controls.email.errors.pattern">This field is invalid.</span>
         </mat-error>
     </mat-form-field><br>
-    <mat-form-field class="form-field" appearance="outline" required>
+    <mat-form-field class="form-field" appearance="outline" [type]="hide ? 'password' : 'text'" required>
         <mat-label>Password</mat-label>
-        <input matInput formControlName="password" type="password" required>
+        <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
+        <mat-icon matSuffix (click)="hide = !hide" style="cursor: pointer;">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         <mat-error *ngIf="loginForm.controls.password.touched && loginForm.controls.password.invalid">
             <span *ngIf="loginForm.controls.password.errors.required">This field is mandatory.</span>
         </mat-error>
     </mat-form-field><br>
     <button mat-raised-button color="primary" type="submit">Log In</button>
-</form >
+</form>

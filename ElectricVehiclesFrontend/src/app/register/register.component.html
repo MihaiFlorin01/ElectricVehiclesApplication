@@ -1,15 +1,26 @@
-<form class="registerForm">
-    <mat-form-field appearance="fill">
+<form [formGroup]="registerForm" (ngSubmit)="submit()" novalidate>
+    <mat-form-field class="form-field" appearance="outline" required>
         <mat-label>Username</mat-label>
-        <input matInput>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-        <mat-label>Password</mat-label>
-        <input matInput>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
+        <input matInput formControlName="username" type="username" required>
+        <mat-error *ngIf="registerForm.controls.username.touched && registerForm.controls.username.invalid">
+            <span *ngIf="registerForm.controls.username.errors.required">This field is mandatory.</span>
+        </mat-error>
+    </mat-form-field><br>
+    <mat-form-field class="form-field" appearance="outline" required>
         <mat-label>Email</mat-label>
-        <input matInput>
-    </mat-form-field>
-    <button mat-raised-button>Register</button>
-</form >
+        <input matInput formControlName="email" required>
+        <mat-error *ngIf="registerForm.controls.email.touched && registerForm.controls.email.invalid">
+            <span *ngIf="registerForm.controls.email.errors.required">This field is mandatory.</span>
+            <span *ngIf="registerForm.controls.email.errors.pattern">This field is invalid.</span>
+        </mat-error>
+    </mat-form-field><br>
+    <mat-form-field class="form-field" appearance="outline" [type]="hide ? 'password' : 'text'" required>
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
+        <mat-icon matSuffix (click)="hide = !hide" style="cursor: pointer;">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="registerForm.controls.password.touched && registerForm.controls.password.invalid">
+            <span *ngIf="registerForm.controls.password.errors.required">This field is mandatory.</span>
+        </mat-error>
+    </mat-form-field><br>
+    <button mat-raised-button color="primary" type="submit">Register</button>
+</form>
