@@ -1,8 +1,11 @@
-﻿using Abstractions;
-using AutoMapper;
+﻿using AutoMapper;
 using Dtos.BikeDtos;
 using Microsoft.AspNetCore.Mvc;
 using Entities;
+using MediatR;
+using CQRS.Queries.BikeQueries;
+using CQRS.Commands.BikeCommands;
+using Abstractions;
 
 namespace API.Controllers
 {
@@ -10,32 +13,33 @@ namespace API.Controllers
     [ApiController]
     public class BikesController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public BikesController(IUnitOfWork unitOfWork, IMapper mapper)
+        public BikesController(IMediator mediator, IMapper mapper, IUnitOfWork unitOfWork)
         {
-            _unitOfWork= unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            _mapper= mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         [HttpGet]
         //[ProducesResponseType(typeof(IEnumerable<BikeDto>), 200)]
         public async Task<ActionResult<IEnumerable<ViewBikeDto>>> GetBikes()
         {
-            var bikes = await _unitOfWork.GetRepository<Bike>().GetAllAsync();
+            var bikes = await _mediator.Send(new ViewBikesQuery());
 
             return Ok(_mapper.Map<IEnumerable<ViewBikeDto>>(bikes));
         }
 
-        [HttpGet("{id}", Name ="GetBikeById")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ViewBikeDto>> GetBikeById(long id)
         {
-            var bike = await _unitOfWork.GetRepository<Bike>().GetByIdAsync(id);
-            if (bike == null || bike.IsDeleted == true)
+            var bike = await _mediator.Send(new ViewBikeByIdQuery()
             {
-                return NotFound();
-            }
+                Id = id,
+            });
 
             return Ok(_mapper.Map<ViewBikeDto>(bike));
         }
@@ -43,41 +47,42 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<ViewBikeDto>> AddBike(CreateBikeDto createBikeDto)
         {
-            var bikeEntity = _mapper.Map<Bike>(createBikeDto);
-            _unitOfWork.GetRepository<Bike>().Add(bikeEntity);
-            await _unitOfWork.SaveChangesAsync();
-            var bikeToReturn = _mapper.Map<ViewBikeDto>(bikeEntity);
+            var bike = _mapper.Map<CreateBikeCommand>(createBikeDto);
 
-            return CreatedAtRoute("GetBikeById", new { id = bikeEntity.Id }, bikeToReturn);
+            var bikeToSend = await _mediator.Send(bike);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var bikeToReturn = _mapper.Map<ViewBikeDto>(bikeToSend);
+
+            return Ok(bikeToReturn);
         }
 
         [HttpPut]
         public async Task<ActionResult<ViewBikeDto>> UpdateBike(UpdateBikeDto updateBikeDto)
         {
-            var bikeEntity = _mapper.Map<Bike>(updateBikeDto);
-            if (bikeEntity.Id <= 0)
-            {
-                return BadRequest();
-            }
-            _unitOfWork.GetRepository<Bike>().Update(bikeEntity);
+            var bike = _mapper.Map<UpdateBikeCommand>(updateBikeDto);
+
+            var bikeToSend = await _mediator.Send(bike);
+
             await _unitOfWork.SaveChangesAsync();
-            var bikeToReturn = _mapper.Map<ViewBikeDto>(bikeEntity);
+
+            var bikeToReturn = _mapper.Map<ViewBikeDto>(bikeToSend);
 
             return Ok(bikeToReturn);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ViewBikeDto>> DeleteBike(int id)
-        {
-            var bike = await _unitOfWork.GetRepository<Bike>().GetByIdAsync(id);
-            if (bike == null)
-            {
-                return NotFound();
-            }
-            await _unitOfWork.GetRepository<Bike>().DeleteByIdAsync(bike.Id);
-            await _unitOfWork.SaveChangesAsync();
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<ViewBikeDto>> DeleteBike(int id)
+        //{
+        //    var bike = await _unitOfWork.GetRepository<Bike>().GetByIdAsync(id);
+        //    if (bike == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    await _mediator.Send();
 
-            return Ok(_mapper.Map<ViewBikeDto>(bike));
-        }
+        //    return Ok(_mapper.Map<ViewBikeDto>(bike));
+        //}
     }
 }

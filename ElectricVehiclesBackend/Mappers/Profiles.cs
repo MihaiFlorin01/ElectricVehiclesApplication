@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CQRS.Commands.BikeCommands;
 using Dtos.BikeDtos;
 using Dtos.BikeTypeDtos;
 using Dtos.UserDtos;
@@ -21,6 +22,13 @@ namespace Mappers
             CreateMap<User, ViewUserDto>().ReverseMap();
             CreateMap<User, CreateUserDto>().ReverseMap();
             CreateMap<User, UpdateUserDto>().ReverseMap();
+
+            CreateMap<Bike, CreateBikeCommand>().ReverseMap();
+            CreateMap<Bike, UpdateBikeCommand>().ReverseMap();
+            CreateMap<CreateBikeCommand, CreateBikeDto>().ReverseMap();
+            CreateMap<CreateBikeDto, ViewBikeDto>().ReverseMap();
+            CreateMap<UpdateBikeCommand, UpdateBikeDto>().ReverseMap();
+            CreateMap<UpdateBikeDto, ViewBikeDto>().ReverseMap();
         }
     }
 }

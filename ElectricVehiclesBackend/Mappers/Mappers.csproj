@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CQRS\CQRS.csproj" />
     <ProjectReference Include="..\Dtos\Dtos.csproj" />
     <ProjectReference Include="..\Models\Entities.csproj" />
   </ItemGroup>

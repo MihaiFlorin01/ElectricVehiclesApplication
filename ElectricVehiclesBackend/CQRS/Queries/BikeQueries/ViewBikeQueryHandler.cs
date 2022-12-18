@@ -4,7 +4,7 @@ using MediatR;
 
 namespace CQRS.Queries.BikeQueries
 {
-    public class ViewBikeQueryHandler : IRequestHandler<ViewBikeQuery, IEnumerable<Bike>>
+    public class ViewBikeQueryHandler : IRequestHandler<ViewBikesQuery, IEnumerable<Bike>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -13,7 +13,7 @@ namespace CQRS.Queries.BikeQueries
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Bike>> Handle(ViewBikeQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Bike>> Handle(ViewBikesQuery request, CancellationToken cancellationToken)
         {
             return await _unitOfWork.GetRepository<Bike>().GetAllAsync();
         }

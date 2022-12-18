@@ -5,6 +5,7 @@ using Infrastructure.GenericRepository;
 using Infrastructure.Context;
 using System.Reflection;
 using MediatR;
+using CQRS.Queries.BikeQueries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ string connectionString = builder.Configuration.GetConnectionString("ConnectionS
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(typeof(Profiles).Assembly);
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddMediatR(typeof(ViewBikesQuery).GetTypeInfo().Assembly);
 
 var app = builder.Build();
 

@@ -1,11 +1,12 @@
 ﻿using Abstractions;
 using AutoMapper;
+using Dtos.BikeDtos;
 using Entities;
 using MediatR;
 
 namespace CQRS.Commands.BikeCommands
 {
-    public class CreateBikeCommandHandler : IRequestHandler<CreateBikeCommand, Bike>
+    public class CreateBikeCommandHandler : IRequestHandler<CreateBikeCommand, CreateBikeDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -16,9 +17,12 @@ namespace CQRS.Commands.BikeCommands
             _mapper = mapper;
         }
 
-        public Task<Bike> Handle(CreateBikeCommand request, CancellationToken cancellationToken)
+        public Task<CreateBikeDto> Handle(CreateBikeCommand request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_unitOfWork.GetRepository<Bike>().Add(_mapper.Map<Bike>(request)));
+            var bike = _mapper.Map<Bike>(request);
+            var bikeToAdd = _unitOfWork.GetRepository<Bike>().Add(bike);
+
+            return Task.FromResult(_mapper.Map<CreateBikeDto>(bikeToAdd));
         }
     }
 }
