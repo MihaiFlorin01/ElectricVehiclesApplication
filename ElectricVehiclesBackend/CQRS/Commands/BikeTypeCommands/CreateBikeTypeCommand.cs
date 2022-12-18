@@ -1,8 +1,6 @@
-﻿using Abstractions;
-
-namespace Entities
+﻿namespace CQRS.Commands.BikeTypeCommands
 {
-    public class BikeType : BaseEntityModel
+    public class CreateBikeTypeCommand
     {
         public string? Description { get; set; }
         public decimal PricePerMinute { get; set; }

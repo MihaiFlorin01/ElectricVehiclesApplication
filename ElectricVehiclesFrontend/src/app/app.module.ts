@@ -9,9 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RegisterComponent } from './register/register.component'
 import { MatIconModule } from '@angular/material/icon'; 
-import {MatToolbarModule} from '@angular/material/toolbar'; 
+import { MatToolbarModule } from '@angular/material/toolbar'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MainComponent } from './main/main.component';
+import { AddBikeComponent } from './add-bike/add-bike.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { MainComponent } from './main/main.component';
     NavbarComponent,
     RegisterComponent,
     MainComponent,
+    AddBikeComponent,
   ],
   imports: [
     AppRoutingModule,

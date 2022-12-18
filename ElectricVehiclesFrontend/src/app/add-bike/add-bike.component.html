@@ -1,0 +1,19 @@
+<form [formGroup]="addBikeForm" (ngSubmit)="submit()" novalidate>
+    <mat-form-field class="form-field" appearance="outline" required>
+    <mat-label>BikeId</mat-label>
+    <input matInput formControlName="bikeId" required>
+        <mat-error *ngIf="addBikeForm.touched && addBikeForm.controls.bikeId.invalid">
+            <span *ngIf="addBikeForm.controls.bikeId.errors?.required">This field is mandatory.</span>
+            <span *ngIf="addBikeForm.controls.bikeId.errors?.pattern">This field is invalid.</span>
+        </mat-error>
+    </mat-form-field><br>
+    <mat-form-field class="form-field" appearance="outline" required>
+        <mat-label>BikeType</mat-label>
+        <input matInput formControlName="bikeType" required>
+        <mat-error *ngIf="addBikeForm.controls.bikeType.touched && addBikeForm.controls.bikeType.invalid">
+            <span *ngIf="addBikeForm.controls.bikeType.errors?.required">This field is mandatory.</span>
+            <span *ngIf="addBikeForm.controls.bikeType.errors?.pattern">This field is invalid.</span>
+        </mat-error>
+    </mat-form-field><br>
+    <button mat-raised-button color="primary" type="submit">Add Bike</button>    
+</form>

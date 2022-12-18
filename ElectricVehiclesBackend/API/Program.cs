@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Abstractions;
 using Infrastructure.GenericRepository;
 using Infrastructure.Context;
+using System.Reflection;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,7 @@ string connectionString = builder.Configuration.GetConnectionString("ConnectionS
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(typeof(Profiles).Assembly);
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
 var app = builder.Build();
 

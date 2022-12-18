@@ -1,6 +1,6 @@
 ﻿using Abstractions;
 
-namespace Models
+namespace Entities
 {
     public class Rental : BaseEntityModel
     {

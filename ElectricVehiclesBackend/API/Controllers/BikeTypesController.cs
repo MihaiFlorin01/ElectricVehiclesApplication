@@ -2,7 +2,7 @@
 using AutoMapper;
 using Dtos.BikeTypeDtos;
 using Microsoft.AspNetCore.Mvc;
-using Models;
+using Entities;
 
 namespace API.Controllers
 {

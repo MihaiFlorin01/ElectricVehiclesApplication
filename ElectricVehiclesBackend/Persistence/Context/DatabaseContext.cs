@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Models;
+﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Context
 {

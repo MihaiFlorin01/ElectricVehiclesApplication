@@ -1,7 +1,7 @@
 ﻿using Abstractions;
 using Common.Enums;
 
-namespace Models
+namespace Entities
 {
     public class User : BaseEntityModel
     {

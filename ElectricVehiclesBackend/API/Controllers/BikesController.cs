@@ -2,7 +2,7 @@
 using AutoMapper;
 using Dtos.BikeDtos;
 using Microsoft.AspNetCore.Mvc;
-using Models;
+using Entities;
 
 namespace API.Controllers
 {
@@ -25,7 +25,7 @@ namespace API.Controllers
         {
             var bikes = await _unitOfWork.GetRepository<Bike>().GetAllAsync();
 
-            return Ok(_mapper.Map<IEnumerable<ViewBikeDto>>(bikes.Where(x => x.IsDeleted == false)));
+            return Ok(_mapper.Map<IEnumerable<ViewBikeDto>>(bikes));
         }
 
         [HttpGet("{id}", Name ="GetBikeById")]

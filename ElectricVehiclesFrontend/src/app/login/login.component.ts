@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  submit() {
+  submit(): void {
     if (!this.loginForm.valid) {
       return;
     }

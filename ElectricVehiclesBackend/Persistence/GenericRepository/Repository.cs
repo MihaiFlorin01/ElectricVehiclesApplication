@@ -15,7 +15,7 @@ namespace Infrastructure.GenericRepository
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.Where(x => x.IsDeleted == false).ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(long id)

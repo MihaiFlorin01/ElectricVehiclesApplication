@@ -2,7 +2,7 @@
 using Dtos.BikeDtos;
 using Dtos.BikeTypeDtos;
 using Dtos.UserDtos;
-using Models;
+using Entities;
 
 namespace Mappers
 {
