@@ -25,10 +25,12 @@ namespace Mappers
 
             CreateMap<Bike, CreateBikeCommand>().ReverseMap();
             CreateMap<Bike, UpdateBikeCommand>().ReverseMap();
+            CreateMap<Bike, DeleteBikeDto>().ReverseMap();
             CreateMap<CreateBikeCommand, CreateBikeDto>().ReverseMap();
             CreateMap<CreateBikeDto, ViewBikeDto>().ReverseMap();
             CreateMap<UpdateBikeCommand, UpdateBikeDto>().ReverseMap();
             CreateMap<UpdateBikeDto, ViewBikeDto>().ReverseMap();
+            CreateMap<DeleteBikeDto, ViewBikeDto>().ReverseMap();
         }
     }
 }

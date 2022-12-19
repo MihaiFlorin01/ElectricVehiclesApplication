@@ -45,44 +45,45 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ViewBikeDto>> AddBike(CreateBikeDto createBikeDto)
+        public async Task<IActionResult> AddBike(CreateBikeDto createBikeDto)
         {
-            var bike = _mapper.Map<CreateBikeCommand>(createBikeDto);
-
-            var bikeToSend = await _mediator.Send(bike);
+            var bikeToSend = await _mediator.Send(new CreateBikeCommand()
+            {
+                Id = createBikeDto.Id,
+                RegisterDate = createBikeDto.RegisterDate,
+                Type = createBikeDto.Type,
+            });
 
             await _unitOfWork.SaveChangesAsync();
 
-            var bikeToReturn = _mapper.Map<ViewBikeDto>(bikeToSend);
-
-            return Ok(bikeToReturn);
+            return Ok(bikeToSend);
         }
 
         [HttpPut]
-        public async Task<ActionResult<ViewBikeDto>> UpdateBike(UpdateBikeDto updateBikeDto)
+        public async Task<IActionResult> UpdateBike(UpdateBikeDto updateBikeDto)
         {
-            var bike = _mapper.Map<UpdateBikeCommand>(updateBikeDto);
-
-            var bikeToSend = await _mediator.Send(bike);
+            var bikeToSend = await _mediator.Send(new UpdateBikeCommand()
+            {
+                Id = updateBikeDto.Id,
+                RegisterDate = updateBikeDto.RegisterDate,
+                Type = updateBikeDto.Type,
+            });
 
             await _unitOfWork.SaveChangesAsync();
 
-            var bikeToReturn = _mapper.Map<ViewBikeDto>(bikeToSend);
-
-            return Ok(bikeToReturn);
+            return Ok(bikeToSend);
         }
 
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<ViewBikeDto>> DeleteBike(int id)
-        //{
-        //    var bike = await _unitOfWork.GetRepository<Bike>().GetByIdAsync(id);
-        //    if (bike == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    await _mediator.Send();
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBike(int id)
+        {
+            
+            var bikeToSend = await _mediator.Send(new DeleteBikeByIdCommand()
+            {
+                Id = id
+            });
 
-        //    return Ok(_mapper.Map<ViewBikeDto>(bike));
-        //}
+            return Ok(bikeToSend);
+        }
     }
 }
