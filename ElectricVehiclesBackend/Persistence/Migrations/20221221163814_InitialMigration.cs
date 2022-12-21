@@ -13,8 +13,7 @@ namespace Infrastructure.Migrations
                 name: "Bikes",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     RegisterDate = table.Column<DateTime>(type: "datetime2", maxLength: 200, nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -30,8 +29,7 @@ namespace Infrastructure.Migrations
                 name: "BikeTypes",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     PricePerMinute = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -47,8 +45,7 @@ namespace Infrastructure.Migrations
                 name: "Customers",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     BillingAddress = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -64,8 +61,7 @@ namespace Infrastructure.Migrations
                 name: "Invoices",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GrossAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     VAT = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     NetAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -83,8 +79,7 @@ namespace Infrastructure.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
@@ -102,12 +97,11 @@ namespace Infrastructure.Migrations
                 name: "Rentals",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BikeId = table.Column<int>(type: "int", nullable: false),
-                    BikeId1 = table.Column<long>(type: "bigint", nullable: true),
+                    BikeId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
-                    CustomerId1 = table.Column<long>(type: "bigint", nullable: true),
+                    CustomerId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     StartDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     InvoiceId = table.Column<int>(type: "int", nullable: false),

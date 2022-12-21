@@ -17,12 +17,13 @@ namespace CQRS.Commands.BikeCommands
             _mapper = mapper;
         }
 
-        public Task<UpdateBikeDto> Handle(UpdateBikeCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateBikeDto> Handle(UpdateBikeCommand request, CancellationToken cancellationToken)
         {
             var bike = _mapper.Map<Bike>(request);
             var bikeToUpdate = _unitOfWork.GetRepository<Bike>().Update(bike);
+            await _unitOfWork.SaveChangesAsync();
 
-            return Task.FromResult(_mapper.Map<UpdateBikeDto>(bikeToUpdate));
+            return _mapper.Map<UpdateBikeDto>(bikeToUpdate);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Dtos.BikeDtos;
 using Microsoft.AspNetCore.Mvc;
-using Entities;
 using MediatR;
 using CQRS.Queries.BikeQueries;
 using CQRS.Commands.BikeCommands;
@@ -34,7 +33,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ViewBikeDto>> GetBikeById(long id)
+        public async Task<ActionResult<ViewBikeDto>> GetBikeById(Guid id)
         {
             var bike = await _mediator.Send(new ViewBikeByIdQuery()
             {
@@ -44,12 +43,12 @@ namespace API.Controllers
             return Ok(_mapper.Map<ViewBikeDto>(bike));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddBike(CreateBikeDto createBikeDto)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> AddBike(Guid id, CreateBikeDto createBikeDto)
         {
             var bikeToSend = await _mediator.Send(new CreateBikeCommand()
             {
-                Id = createBikeDto.Id,
+                Id = id,
                 RegisterDate = createBikeDto.RegisterDate,
                 Type = createBikeDto.Type,
             });
@@ -75,9 +74,8 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBike(int id)
+        public async Task<IActionResult> DeleteBike(Guid id)
         {
-            
             var bikeToSend = await _mediator.Send(new DeleteBikeByIdCommand()
             {
                 Id = id

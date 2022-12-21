@@ -18,7 +18,7 @@ namespace Infrastructure.GenericRepository
             return await _dbSet.Where(x => x.IsDeleted == false).ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(long id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -36,7 +36,7 @@ namespace Infrastructure.GenericRepository
             return _dbSet.Update(entity).Entity;
         }
 
-        public async Task<bool> DeleteByIdAsync(long id)
+        public async Task<bool> DeleteByIdAsync(Guid id)
         {
             var entity = await GetByIdAsync(id);
             entity.IsDeleted = true;

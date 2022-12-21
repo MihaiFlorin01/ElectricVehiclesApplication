@@ -22,13 +22,11 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Models.Bike", b =>
+            modelBuilder.Entity("Entities.Bike", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
@@ -53,13 +51,11 @@ namespace Infrastructure.Migrations
                     b.ToTable("Bikes");
                 });
 
-            modelBuilder.Entity("Models.BikeType", b =>
+            modelBuilder.Entity("Entities.BikeType", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
@@ -83,13 +79,11 @@ namespace Infrastructure.Migrations
                     b.ToTable("BikeTypes");
                 });
 
-            modelBuilder.Entity("Models.Customer", b =>
+            modelBuilder.Entity("Entities.Customer", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BillingAddress")
                         .IsRequired()
@@ -115,13 +109,11 @@ namespace Infrastructure.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Models.Invoice", b =>
+            modelBuilder.Entity("Entities.Invoice", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
@@ -149,19 +141,17 @@ namespace Infrastructure.Migrations
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("Models.Rental", b =>
+            modelBuilder.Entity("Entities.Rental", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("BikeId")
                         .HasColumnType("int");
 
-                    b.Property<long?>("BikeId1")
-                        .HasColumnType("bigint");
+                    b.Property<Guid?>("BikeId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
@@ -169,8 +159,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<long?>("CustomerId1")
-                        .HasColumnType("bigint");
+                    b.Property<Guid?>("CustomerId1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime2");
@@ -196,13 +186,11 @@ namespace Infrastructure.Migrations
                     b.ToTable("Rentals");
                 });
 
-            modelBuilder.Entity("Models.User", b =>
+            modelBuilder.Entity("Entities.User", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
@@ -237,13 +225,13 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Models.Rental", b =>
+            modelBuilder.Entity("Entities.Rental", b =>
                 {
-                    b.HasOne("Models.Bike", "Bike")
+                    b.HasOne("Entities.Bike", "Bike")
                         .WithMany("Rentals")
                         .HasForeignKey("BikeId1");
 
-                    b.HasOne("Models.Customer", "Customer")
+                    b.HasOne("Entities.Customer", "Customer")
                         .WithMany("Rentals")
                         .HasForeignKey("CustomerId1");
 
@@ -252,12 +240,12 @@ namespace Infrastructure.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("Models.Bike", b =>
+            modelBuilder.Entity("Entities.Bike", b =>
                 {
                     b.Navigation("Rentals");
                 });
 
-            modelBuilder.Entity("Models.Customer", b =>
+            modelBuilder.Entity("Entities.Customer", b =>
                 {
                     b.Navigation("Rentals");
                 });
