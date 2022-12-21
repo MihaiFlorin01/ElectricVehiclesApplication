@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using CQRS.Queries.BikeQueries;
 using CQRS.Commands.BikeCommands;
-using Abstractions;
+using FluentValidation;
+using Entities;
 
 namespace API.Controllers
 {
@@ -14,13 +15,13 @@ namespace API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IValidator<Bike> _validator;
 
-        public BikesController(IMediator mediator, IMapper mapper, IUnitOfWork unitOfWork)
+        public BikesController(IMediator mediator, IMapper mapper, IValidator<Bike> validator)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
         [HttpGet]
@@ -44,23 +45,43 @@ namespace API.Controllers
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> AddBike(Guid id, CreateBikeDto createBikeDto)
+        public async Task<ActionResult<ViewBikeDto>> AddBike(Guid id, CreateBikeDto createBikeDto)
         {
+            var createBikeDtoMapped = _mapper.Map<Bike>(createBikeDto);
+
+            var validationResult = await _validator.ValidateAsync(createBikeDtoMapped);
+            
+            if (!validationResult.IsValid)
+            {
+                BadRequest(validationResult);
+            }
+
             var bikeToSend = await _mediator.Send(new CreateBikeCommand()
             {
                 Id = id,
-                RegisterDate = createBikeDto.RegisterDate,
                 Type = createBikeDto.Type,
+                RegisterDate = createBikeDto.RegisterDate,
             });
 
-            await _unitOfWork.SaveChangesAsync();
+            var bikeToSendMapped = _mapper.Map<ViewBikeDto>(bikeToSend);
 
-            return Ok(bikeToSend);
+            bikeToSendMapped.Id = id;
+
+            return Ok(bikeToSendMapped);
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateBike(UpdateBikeDto updateBikeDto)
+        public async Task<ActionResult<ViewBikeDto>> UpdateBike(UpdateBikeDto updateBikeDto)
         {
+            var updateBikeDtoMapped = _mapper.Map<Bike>(updateBikeDto);
+
+            var validationResult = await _validator.ValidateAsync(updateBikeDtoMapped);
+
+            if (!validationResult.IsValid)
+            {
+                BadRequest(validationResult);
+            }
+
             var bikeToSend = await _mediator.Send(new UpdateBikeCommand()
             {
                 Id = updateBikeDto.Id,
@@ -68,17 +89,17 @@ namespace API.Controllers
                 Type = updateBikeDto.Type,
             });
 
-            await _unitOfWork.SaveChangesAsync();
+            var bikeToSendMapped = _mapper.Map<ViewBikeDto>(bikeToSend);
 
-            return Ok(bikeToSend);
+            return Ok(bikeToSendMapped);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBike(Guid id)
+        public async Task<ActionResult<ViewBikeDto>> DeleteBike(Guid id)
         {
             var bikeToSend = await _mediator.Send(new DeleteBikeByIdCommand()
             {
-                Id = id
+                Id = id,
             });
 
             return Ok(bikeToSend);
