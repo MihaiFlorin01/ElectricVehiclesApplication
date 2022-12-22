@@ -1,10 +1,13 @@
 ﻿using Entities;
+using Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Context
 {
     public class DatabaseContext : DbContext
     {
+        private readonly DatabaseSettings _dbSettings;
         public DbSet<Bike>? Bikes { get; set; }
         public DbSet<BikeType>? BikeTypes { get; set; }
         public DbSet<Customer>? Customers { get; set; }
@@ -12,9 +15,14 @@ namespace Infrastructure.Context
         public DbSet<Rental>? Rentals { get; set; }
         public DbSet<User>? Users { get; set; }
 
-        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
+        public DatabaseContext(IOptions<DatabaseSettings> optionSettings)
         {
+            _dbSettings = optionSettings.Value;
+        }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(_dbSettings.ConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
