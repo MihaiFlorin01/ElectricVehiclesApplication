@@ -2,7 +2,7 @@
 
 namespace Entities
 {
-    public class Bike : BaseEntityModel
+    public class Vehicle : BaseEntityModel
     {
         public string? Type { get; set; }
         public DateTime RegisterDate { get; set; }

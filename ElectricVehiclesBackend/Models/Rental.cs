@@ -4,8 +4,8 @@ namespace Entities
 {
     public class Rental : BaseEntityModel
     {
-        public int BikeId { get; set; }
-        public Bike? Bike { get; set; }
+        public int VehicleId { get; set; }
+        public Vehicle? Vehicle { get; set; }
         public int CustomerId { get; set; }
         public Customer? Customer { get; set; }
         public DateTime StartDateTime { get; set; }

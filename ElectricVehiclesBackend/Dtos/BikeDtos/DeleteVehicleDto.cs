@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dtos.BikeDtos
+namespace Dtos.VehicleDtos
 {
-    public class DeleteBikeDto
+    public class DeleteVehicleDto
     {
         public Guid Id { get; set; }
     }

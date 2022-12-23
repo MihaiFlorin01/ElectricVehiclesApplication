@@ -1,6 +1,6 @@
-﻿namespace Dtos.BikeDtos
+﻿namespace Dtos.VehicleDtos
 {
-    public class ViewBikeDto
+    public class ViewVehicleDto
     {
         public Guid Id { get; set; }
         public string? Type { get; set; }

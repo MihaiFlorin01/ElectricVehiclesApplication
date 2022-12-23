@@ -1,9 +1,6 @@
-﻿using Dtos.BikeDtos;
-using MediatR;
-
-namespace CQRS.Commands.BikeCommands
+﻿namespace Dtos.VehicleDtos
 {
-    public class CreateBikeCommand : IRequest<CreateBikeDto>
+    public class UpdateVehicleDto
     {
         public Guid Id { get; set; }
         public string? Type { get; set; }

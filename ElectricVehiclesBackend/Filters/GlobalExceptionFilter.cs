@@ -1,10 +1,11 @@
 ﻿using Exceptions;
+using Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace Filters
+namespace SchoolOf.ShoppingCart.Filters
 {
     public class GlobalExceptionFilter : IAsyncExceptionFilter
     {
@@ -34,32 +35,29 @@ namespace Filters
                     StatusCode = 400
                 };
             }
+            else if (context.Exception is InternalValidationException internalValidationException)
+            {
+                var response = new ErrorDto
+                {
+                    Errors = internalValidationException.Errors
+                };
+
+                context.Result = new JsonResult(response)
+                {
+                    StatusCode = 400
+                };
+            }
             else
             {
-                if (context.Exception is InternalValidationException internalValidationException)
+                var response = new ErrorDto
                 {
-                    var response = new ErrorDto
-                    {
-                        Errors = internalValidationException.Errors
-                    };
+                    Errors = new List<string> { "Something went wrong. Please contact the support team. Id: " + guid }
+                };
 
-                    context.Result = new JsonResult(response)
-                    {
-                        StatusCode = 400
-                    };
-                }
-                else
+                context.Result = new JsonResult(response)
                 {
-                    var response = new ErrorDto
-                    {
-                        Errors = new List<string> { "Something went wrong. Please contact the support team. Id: " + guid }
-                    };
-
-                    context.Result = new JsonResult(response)
-                    {
-                        StatusCode = (int)HttpStatusCode.InternalServerError
-                    };
-                }
+                    StatusCode = (int)HttpStatusCode.InternalServerError
+                };
             }
         }
     }

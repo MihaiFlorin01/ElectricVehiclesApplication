@@ -8,8 +8,8 @@ namespace Infrastructure.Context
     public class DatabaseContext : DbContext
     {
         private readonly DatabaseSettings _dbSettings;
-        public DbSet<Bike>? Bikes { get; set; }
-        public DbSet<BikeType>? BikeTypes { get; set; }
+        public DbSet<Vehicle>? Vehicles { get; set; }
+        public DbSet<VehicleType>? VehicleTypes { get; set; }
         public DbSet<Customer>? Customers { get; set; }
         public DbSet<Invoice>? Invoices { get; set; }
         public DbSet<Rental>? Rentals { get; set; }
@@ -27,13 +27,13 @@ namespace Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Bike>().HasKey(x => x.Id);
-            modelBuilder.Entity<Bike>().Property(x => x.Type).HasMaxLength(200).IsRequired();
-            modelBuilder.Entity<Bike>().Property(x => x.RegisterDate).HasMaxLength(200).IsRequired();
+            modelBuilder.Entity<Vehicle>().HasKey(x => x.Id);
+            modelBuilder.Entity<Vehicle>().Property(x => x.Type).HasMaxLength(200).IsRequired();
+            modelBuilder.Entity<Vehicle>().Property(x => x.RegisterDate).HasMaxLength(200).IsRequired();
 
-            modelBuilder.Entity<BikeType>().HasKey(x => x.Id);
-            modelBuilder.Entity<BikeType>().Property(x => x.Description).HasMaxLength(200).IsRequired();
-            modelBuilder.Entity<BikeType>().Property(x => x.PricePerMinute).IsRequired();
+            modelBuilder.Entity<VehicleType>().HasKey(x => x.Id);
+            modelBuilder.Entity<VehicleType>().Property(x => x.Description).HasMaxLength(200).IsRequired();
+            modelBuilder.Entity<VehicleType>().Property(x => x.PricePerMinute).IsRequired();
 
             modelBuilder.Entity<Customer>().HasKey(x => x.Id);
             modelBuilder.Entity<Customer>().Property(x => x.Name).HasMaxLength(200).IsRequired();
@@ -46,7 +46,7 @@ namespace Infrastructure.Context
             modelBuilder.Entity<Invoice>().Property(x => x.Paid).IsRequired();
 
             modelBuilder.Entity<Rental>().HasKey(x => x.Id);
-            modelBuilder.Entity<Rental>().Property(x => x.BikeId).IsRequired();
+            modelBuilder.Entity<Rental>().Property(x => x.VehicleId).IsRequired();
             modelBuilder.Entity<Rental>().Property(x => x.CustomerId).IsRequired();
             modelBuilder.Entity<Rental>().Property(x => x.StartDateTime).IsRequired();
             modelBuilder.Entity<Rental>().Property(x => x.EndDateTime).IsRequired();

@@ -1,8 +1,9 @@
-﻿namespace Dtos.BikeTypeDtos
+﻿using Abstractions;
+
+namespace Entities
 {
-    public class UpdateBikeTypeDto
+    public class VehicleType : BaseEntityModel
     {
-        public Guid Id { get; set; }
         public string? Description { get; set; }
         public decimal PricePerMinute { get; set; }
     }

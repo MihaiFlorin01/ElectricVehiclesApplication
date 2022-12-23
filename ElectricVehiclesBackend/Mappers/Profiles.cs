@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using CQRS.Commands.BikeCommands;
-using Dtos.BikeDtos;
-using Dtos.BikeTypeDtos;
+using Dtos.VehicleDtos;
+using Dtos.VehicleTypeDtos;
 using Dtos.UserDtos;
 using Entities;
 
@@ -11,26 +10,17 @@ namespace Mappers
     {
         public Profiles()
         {
-            CreateMap<Bike, ViewBikeDto>().ReverseMap();
-            CreateMap<Bike, CreateBikeDto>().ReverseMap();
-            CreateMap<Bike, UpdateBikeDto>().ReverseMap();
+            CreateMap<Vehicle, ViewVehicleDto>().ReverseMap();
+            CreateMap<Vehicle, CreateVehicleDto>().ReverseMap();
+            CreateMap<Vehicle, UpdateVehicleDto>().ReverseMap();
 
-            CreateMap<BikeType, ViewBikeTypeDto>().ReverseMap();
-            CreateMap<BikeType, CreateBikeTypeDto>().ReverseMap();
-            CreateMap<BikeType, UpdateBikeTypeDto>().ReverseMap();
+            CreateMap<VehicleType, ViewVehicleTypeDto>().ReverseMap();
+            CreateMap<VehicleType, CreateVehicleTypeDto>().ReverseMap();
+            CreateMap<VehicleType, UpdateVehicleTypeDto>().ReverseMap();
 
             CreateMap<User, ViewUserDto>().ReverseMap();
             CreateMap<User, CreateUserDto>().ReverseMap();
             CreateMap<User, UpdateUserDto>().ReverseMap();
-
-            CreateMap<Bike, CreateBikeCommand>().ReverseMap();
-            CreateMap<Bike, UpdateBikeCommand>().ReverseMap();
-            CreateMap<Bike, DeleteBikeDto>().ReverseMap();
-            CreateMap<CreateBikeCommand, CreateBikeDto>().ReverseMap();
-            CreateMap<CreateBikeDto, ViewBikeDto>().ReverseMap();
-            CreateMap<UpdateBikeCommand, UpdateBikeDto>().ReverseMap();
-            CreateMap<UpdateBikeDto, ViewBikeDto>().ReverseMap();
-            CreateMap<DeleteBikeDto, ViewBikeDto>().ReverseMap();
         }
     }
 }

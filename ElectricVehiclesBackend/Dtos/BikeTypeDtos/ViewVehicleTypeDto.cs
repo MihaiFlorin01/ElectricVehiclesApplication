@@ -1,6 +1,6 @@
-﻿namespace CQRS.Queries.BikeTypeQueries
+﻿namespace Dtos.VehicleTypeDtos
 {
-    public class ViewBikeTypeQuery
+    public class ViewVehicleTypeDto
     {
         public Guid Id { get; set; }
         public string? Description { get; set; }

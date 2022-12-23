@@ -1,6 +1,6 @@
-﻿namespace CQRS.Commands.BikeTypeCommands
+﻿namespace Dtos.VehicleTypeDtos
 {
-    public class CreateBikeTypeCommand
+    public class CreateVehicleTypeDto
     {
         public string? Description { get; set; }
         public decimal PricePerMinute { get; set; }
