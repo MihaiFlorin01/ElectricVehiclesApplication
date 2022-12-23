@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Dtos\Dtos.csproj" />
+    <ProjectReference Include="..\Filters\Filters.csproj" />
     <ProjectReference Include="..\Mappers\Mappers.csproj" />
     <ProjectReference Include="..\Persistence\Infrastructure.csproj" />
     <ProjectReference Include="..\Validators\Validators.csproj" />
