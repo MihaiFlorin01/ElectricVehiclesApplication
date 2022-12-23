@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Dtos.VehicleDtos;
 using Microsoft.AspNetCore.Mvc;
-using CQRS.Queries.VehicleQueries;
 using FluentValidation;
 using Entities;
 using Abstractions;
@@ -56,6 +55,8 @@ namespace API.Controllers
             {
                 BadRequest(validationResult);
             }
+
+            vehicleEntity.Id = id;
 
             _unitOfWork.GetRepository<Vehicle>().Add(vehicleEntity);
 
