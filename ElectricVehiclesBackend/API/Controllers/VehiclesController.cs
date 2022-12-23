@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using Entities;
 using Abstractions;
+using System.Net.Mime;
 
 namespace API.Controllers
 {
@@ -22,8 +23,12 @@ namespace API.Controllers
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(IEnumerable<ViewVehicleDto>), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
-        //[ProducesResponseType(typeof(IEnumerable<VehicleDto>), 200)]
         public async Task<ActionResult<IEnumerable<ViewVehicleDto>>> GetVehicles()
         {
             var vehicles = await _unitOfWork.GetRepository<Vehicle>().GetAllAsync();
@@ -31,8 +36,13 @@ namespace API.Controllers
             return Ok(_mapper.Map<IEnumerable<ViewVehicleDto>>(vehicles));
         }
 
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewVehicleDto), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}", Name = "GetVehicleById")]
-        public async Task<ActionResult<ViewVehicleDto>> GetVehicleById(Guid id)
+        public async Task<ActionResult<ViewVehicleDto>> GetVehicleById(int id)
         {
             var vehicle = await _unitOfWork.GetRepository<Vehicle>().GetByIdAsync(id);
 
@@ -44,8 +54,13 @@ namespace API.Controllers
             return Ok(_mapper.Map<ViewVehicleDto>(vehicle));
         }
 
-        [HttpPost("{id}")]
-        public async Task<ActionResult<ViewVehicleDto>> AddVehicle(Guid id, CreateVehicleDto createVehicleDto)
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewVehicleDto), 201)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPost]
+        public async Task<ActionResult<ViewVehicleDto>> AddVehicle(CreateVehicleDto createVehicleDto)
         {
             var vehicleEntity = _mapper.Map<Vehicle>(createVehicleDto);
 
@@ -56,8 +71,6 @@ namespace API.Controllers
                 BadRequest(validationResult);
             }
 
-            vehicleEntity.Id = id;
-
             _unitOfWork.GetRepository<Vehicle>().Add(vehicleEntity);
 
             await _unitOfWork.SaveChangesAsync();
@@ -65,8 +78,13 @@ namespace API.Controllers
             var vehicleToReturn = _mapper.Map<ViewVehicleDto>(vehicleEntity);
 
             return CreatedAtRoute("GetVehicleById", new {id = vehicleEntity.Id}, vehicleToReturn);
-        }
+        }     
 
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewVehicleDto), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]   
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut]
         public async Task<ActionResult<ViewVehicleDto>> UpdateVehicle(UpdateVehicleDto updateVehicleDto)
         {
@@ -88,8 +106,13 @@ namespace API.Controllers
             return Ok(vehicleToReturn);
         }
 
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewVehicleDto), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ViewVehicleDto>> DeleteVehicle(Guid id)
+        public async Task<ActionResult<ViewVehicleDto>> DeleteVehicle(int id)
         {
             var vehicleEntity = await _unitOfWork.GetRepository<Vehicle>().GetByIdAsync(id);
 

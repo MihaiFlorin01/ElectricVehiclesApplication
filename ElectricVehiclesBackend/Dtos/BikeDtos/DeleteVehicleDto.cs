@@ -8,6 +8,6 @@ namespace Dtos.VehicleDtos
 {
     public class DeleteVehicleDto
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
     }
 }
