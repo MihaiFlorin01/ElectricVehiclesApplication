@@ -6,10 +6,11 @@ using Infrastructure.GenericRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddControllers();
 
 builder.Services.AddDbContext<DatabaseContext>();
 

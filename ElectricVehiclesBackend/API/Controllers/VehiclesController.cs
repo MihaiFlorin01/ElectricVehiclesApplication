@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Dtos.VehicleDtos;
 using Microsoft.AspNetCore.Mvc;
-using FluentValidation;
 using Entities;
 using Abstractions;
 using System.Net.Mime;
@@ -14,13 +13,11 @@ namespace API.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IValidator<Vehicle> _validator;
 
-        public VehiclesController(IUnitOfWork unitOfWork, IMapper mapper, IValidator<Vehicle> validator)
+        public VehiclesController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
         [Consumes(MediaTypeNames.Application.Json)]
@@ -64,13 +61,6 @@ namespace API.Controllers
         {
             var vehicleEntity = _mapper.Map<Vehicle>(createVehicleDto);
 
-            var validationResult = await _validator.ValidateAsync(vehicleEntity);
-            
-            if (!validationResult.IsValid)
-            {
-                BadRequest(validationResult);
-            }
-
             _unitOfWork.GetRepository<Vehicle>().Add(vehicleEntity);
 
             await _unitOfWork.SaveChangesAsync();
@@ -89,13 +79,6 @@ namespace API.Controllers
         public async Task<ActionResult<ViewVehicleDto>> UpdateVehicle(UpdateVehicleDto updateVehicleDto)
         {
             var vehicleEntity = _mapper.Map<Vehicle>(updateVehicleDto);
-
-            var validationResult = await _validator.ValidateAsync(vehicleEntity);
-
-            if (!validationResult.IsValid)
-            {
-                BadRequest(validationResult);
-            }
 
             _unitOfWork.GetRepository<Vehicle>().Update(vehicleEntity);
 
