@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using Abstractions;
+using Entities;
 using Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;

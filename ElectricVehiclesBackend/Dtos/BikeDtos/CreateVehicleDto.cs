@@ -3,6 +3,6 @@
     public class CreateVehicleDto
     {
         public string? Type { get; set; }
-        public DateTime RegisterDate { get; set; }
+        public DateTimeOffset RegisterDate { get; set; }
     }
 }

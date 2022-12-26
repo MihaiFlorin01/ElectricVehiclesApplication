@@ -8,8 +8,8 @@ namespace Entities
         public Vehicle? Vehicle { get; set; }
         public int CustomerId { get; set; }
         public Customer? Customer { get; set; }
-        public DateTime StartDateTime { get; set; }
-        public DateTime EndDateTime { get; set; }
+        public DateTimeOffset StartDateTime { get; set; }
+        public DateTimeOffset EndDateTime { get; set; }
         public int InvoiceId { get; set; }
     }
 }
