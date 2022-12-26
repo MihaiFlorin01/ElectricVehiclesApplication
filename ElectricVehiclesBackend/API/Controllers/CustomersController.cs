@@ -46,7 +46,7 @@ namespace API.Controllers
 
             if (customer == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             return Ok(_mapper.Map<ViewCustomerDto>(customer));
@@ -102,7 +102,7 @@ namespace API.Controllers
 
             if (customerEntity == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             await _unitOfWork.GetRepository<Customer>().DeleteByIdAsync(id);
