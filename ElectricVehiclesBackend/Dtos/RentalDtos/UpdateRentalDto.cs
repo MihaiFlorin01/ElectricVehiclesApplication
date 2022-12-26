@@ -1,17 +1,18 @@
-﻿using Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Entities
+namespace Dtos.RentalDtos
 {
-    public class Rental : BaseEntityModel
+    public class UpdateRentalDto
     {
+        public int Id { get; set; }
         public int VehicleId { get; set; }
-        public Vehicle? Vehicle { get; set; }
         public int CustomerId { get; set; }
-        public Customer? Customer { get; set; }
         public int InvoiceId { get; set; }
-        public Invoice? Invoice { get; set; }
         public DateTimeOffset StartDateTime { get; set; }
         public DateTimeOffset EndDateTime { get; set; }
-        
     }
 }

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dtos.VehicleDtos
+namespace Dtos.CustomerDtos
 {
-    public class DeleteVehicleDto
+    public class ViewCustomerDto
     {
         public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? BillingAddress { get; set; }
     }
 }

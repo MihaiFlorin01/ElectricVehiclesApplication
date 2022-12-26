@@ -1,78 +1,117 @@
-﻿//using AutoMapper;
-//using Domain.Entities;
-//using Domain.Models.CustomerModels;
-//using Microsoft.AspNetCore.Mvc;
-//using Persistence.Repositories.CustomerRepositories;
+﻿using Abstractions;
+using AutoMapper;
+using Dtos.CustomerDtos;
+using Dtos.VehicleDtos;
+using Entities;
+using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 
-//namespace API.Controllers
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class CustomersController : ControllerBase
-//    {
-//        private readonly ICustomerRepository _customerRepository;
-//        private readonly IMapper _mapper;
+namespace API.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CustomersController : ControllerBase
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-//        public CustomersController(ICustomerRepository customerRepository, IMapper mapper)
-//        {
-//            _customerRepository= customerRepository;
-//            _mapper= mapper;
-//        }
+        public CustomersController(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
 
-//        [HttpGet]
-//        public async Task<ActionResult<IEnumerable<CustomerForView>>> GetCustomers()
-//        {
-//            var customers = await _customerRepository.GetCustomersAsync();
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(IEnumerable<ViewCustomerDto>), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ViewCustomerDto>>> GetCustomers()
+        {
+            var customers = await _unitOfWork.GetRepository<Customer>().GetAllAsync();
 
-//            return Ok(_mapper.Map<IEnumerable<CustomerForView>>(customers));
-//        }
+            return Ok(_mapper.Map<IEnumerable<ViewCustomerDto>>(customers));
+        }
 
-//        [HttpGet("{id}", Name = "GetCustomerById")]
-//        public async Task<ActionResult<CustomerForView>> GetCustomerById(int id)
-//        {
-//            var customer = await _customerRepository.GetCustomerByIdAsync(id);
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewCustomerDto), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet("{id}", Name = "GetCustomerById")]
+        public async Task<ActionResult<ViewCustomerDto>> GetCustomerById(int id)
+        {
+            var customer = await _unitOfWork.GetRepository<Customer>().GetByIdAsync(id);
 
-//            return Ok(_mapper.Map<CustomerForView>(customer));
-//        }
+            if (customer == null)
+            {
+                return BadRequest();
+            }
 
-//        [HttpPost]
-//        public async Task<ActionResult<CustomerForView>> AddCustomer(CustomerForCreation customerForCreation)
-//        {
-//            var customerEntity = _mapper.Map<Customer>(customerForCreation);
-//            _customerRepository.AddCustomer(customerEntity);
-//            await _customerRepository.SaveChangesAsync();
-//            var customerToReturn = _mapper.Map<CustomerForView>(customerEntity);
+            return Ok(_mapper.Map<ViewCustomerDto>(customer));
+        }
 
-//            return CreatedAtRoute("GetCustomerById", new {id = customerEntity.Id}, customerToReturn);
-//        }
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewCustomerDto), 201)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPost]
+        public async Task<ActionResult<ViewCustomerDto>> AddCustomer(CreateCustomerDto createCustomerDto)
+        {
+            var customerEntity = _mapper.Map<Customer>(createCustomerDto);
+           
+            _unitOfWork.GetRepository<Customer>().Add(customerEntity);
 
-//        [HttpPut]
-//        public async Task<ActionResult<CustomerForView>> UpdateCustomer(CustomerForUpdate customerForUpdate)
-//        {
-//            var customerEntity = _mapper.Map<Customer>(customerForUpdate);
-//            if (customerEntity.Id <= 0)
-//            {
-//                return BadRequest();
-//            }
-//            _customerRepository.UpdateCustomer(customerEntity);
-//            await _customerRepository.SaveChangesAsync();
-//            var customerToReturn = _mapper.Map<CustomerForView>(customerEntity);
+            await _unitOfWork.SaveChangesAsync();
+           
+            var customerToReturn = _mapper.Map<ViewCustomerDto>(customerEntity);
 
-//            return Ok(customerToReturn);
-//        }
+            return CreatedAtRoute("GetCustomerById", new { id = customerEntity.Id }, customerToReturn);
+        }
 
-//        [HttpDelete("{id}")]
-//        public async Task<ActionResult<CustomerForView>> DeleteCustomer(int id)
-//        {
-//            var customer = await _customerRepository.GetCustomerByIdAsync(id);
-//            if (customer == null)
-//            {
-//                return NotFound();
-//            }
-//            _customerRepository.DeleteCustomer(customer);
-//            await _customerRepository.SaveChangesAsync();
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewCustomerDto), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpPut]
+        public async Task<ActionResult<ViewCustomerDto>> UpdateCustomer(UpdateCustomerDto updateCustomerDto)
+        {
+            var customerEntity = _mapper.Map<Customer>(updateCustomerDto);
 
-//            return Ok(_mapper.Map<CustomerForView>(customer));
-//        }
-//    }
-//}
+            _unitOfWork.GetRepository<Customer>().Update(customerEntity);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var customerToReturn = _mapper.Map<ViewCustomerDto>(customerEntity);
+
+            return Ok(customerToReturn);
+        }
+
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewCustomerDto), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ViewCustomerDto>> DeleteCustomer(int id)
+        {
+            var customerEntity = await _unitOfWork.GetRepository<Customer>().GetByIdAsync(id);
+
+            if (customerEntity == null)
+            {
+                return BadRequest();
+            }
+
+            await _unitOfWork.GetRepository<Customer>().DeleteByIdAsync(id);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var customerToReturn = _mapper.Map<ViewVehicleDto>(customerEntity);
+
+            return Ok(customerToReturn);
+        }
+    }
+}

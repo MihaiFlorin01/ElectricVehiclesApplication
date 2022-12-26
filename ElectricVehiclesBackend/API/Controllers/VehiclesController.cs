@@ -45,7 +45,7 @@ namespace API.Controllers
 
             if (vehicle == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             return Ok(_mapper.Map<ViewVehicleDto>(vehicle));
@@ -101,7 +101,7 @@ namespace API.Controllers
 
             if (vehicleEntity == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             await _unitOfWork.GetRepository<Vehicle>().DeleteByIdAsync(id);

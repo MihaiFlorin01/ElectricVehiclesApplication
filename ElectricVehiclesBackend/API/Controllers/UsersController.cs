@@ -3,6 +3,8 @@ using AutoMapper;
 using Dtos.UserDtos;
 using Microsoft.AspNetCore.Mvc;
 using Entities;
+using Dtos.VehicleDtos;
+using System.Net.Mime;
 
 namespace API.Controllers
 {
@@ -19,20 +21,30 @@ namespace API.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(IEnumerable<ViewUserDto>), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ViewUserDto>>> GetUsers()
         {
             var users = await _unitOfWork.GetRepository<User>().GetAllAsync();
 
-            return Ok(_mapper.Map<IEnumerable<ViewUserDto>>(users.Where(x => x.IsDeleted == false)));
+            return Ok(_mapper.Map<IEnumerable<ViewUserDto>>(users));
         }
 
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewUserDto), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}", Name = "GetUserById")]
         public async Task<ActionResult<ViewUserDto>> GetUserById(int id)
         {
             var user = await _unitOfWork.GetRepository<User>().GetByIdAsync(id);
             
-            if (user == null || user.IsDeleted == true)
+            if (user == null)
             {
                 return NotFound();
             }
@@ -40,6 +52,11 @@ namespace API.Controllers
             return Ok(_mapper.Map<ViewUserDto>(user));
         }
 
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewUserDto), 201)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
         public async Task<ActionResult<ViewUserDto>> AddUser(CreateUserDto createUserDto)
         {
@@ -54,15 +71,15 @@ namespace API.Controllers
             return CreatedAtRoute("GetUserById", new { id = userEntity.Id }, userToReturn);
         }
 
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewUserDto), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut]
         public async Task<ActionResult<ViewUserDto>> UpdateUser(UpdateUserDto updateUserDto)
         {
             var userEntity = _mapper.Map<User>(updateUserDto);
-            
-            if (userEntity.Id <= 0)
-            {
-                return BadRequest();
-            }
             
             _unitOfWork.GetRepository<User>().Update(userEntity);
             
@@ -73,6 +90,12 @@ namespace API.Controllers
             return Ok(userToReturn);
         }
 
+
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ViewUserDto), 200)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
         public async Task<ActionResult<ViewUserDto>> DeleteUser(int id)
         {
