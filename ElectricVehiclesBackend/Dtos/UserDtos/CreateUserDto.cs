@@ -1,4 +1,4 @@
-﻿using Common.Enums;
+﻿using Utils.Enums;
 
 namespace Dtos.UserDtos
 {

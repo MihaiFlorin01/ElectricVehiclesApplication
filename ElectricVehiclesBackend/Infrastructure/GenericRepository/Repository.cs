@@ -1,8 +1,8 @@
 ﻿using Abstractions;
-using Infrastructure.Context;
+using Data.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.GenericRepository
+namespace Data.GenericRepository
 {
     public class Repository<T> : IRepository<T> where T : BaseEntityModel
     {
@@ -25,14 +25,10 @@ namespace Infrastructure.GenericRepository
 
         public T Add(T entity)
         {
-            entity.CreatedAt = DateTimeOffset.UtcNow;
-
             return _dbSet.Add(entity).Entity;
         }
         public T Update(T entity)
         {
-            entity.ModifiedAt = DateTimeOffset.UtcNow;
-
             return _dbSet.Update(entity).Entity;
         }
 

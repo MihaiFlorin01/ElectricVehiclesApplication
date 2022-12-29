@@ -1,9 +1,7 @@
-﻿
+﻿using Abstractions;
+using Data.Context;
 
-using Abstractions;
-using Infrastructure.Context;
-
-namespace Infrastructure.GenericRepository
+namespace Data.GenericRepository
 {
     public class UnitOfWork : IUnitOfWork
     {

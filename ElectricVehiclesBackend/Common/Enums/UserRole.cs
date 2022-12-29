@@ -1,4 +1,4 @@
-﻿namespace Common.Enums
+﻿namespace Utils.Enums
 {
     public enum UserRole
     {

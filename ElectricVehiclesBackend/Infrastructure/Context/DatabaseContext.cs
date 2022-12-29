@@ -1,10 +1,10 @@
 ﻿using Abstractions;
 using Entities;
-using Infrastructure.Settings;
+using Data.Settings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace Infrastructure.Context
+namespace Data.Context
 {
     public class DatabaseContext : DbContext
     {

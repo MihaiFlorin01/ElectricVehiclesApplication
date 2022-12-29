@@ -1,8 +1,8 @@
 using Mappers;
 using Abstractions;
-using Infrastructure.Context;
-using Infrastructure.Settings;
-using Infrastructure.GenericRepository;
+using Data.Context;
+using Data.Settings;
+using Data.GenericRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 

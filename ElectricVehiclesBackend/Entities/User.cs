@@ -1,5 +1,5 @@
 ﻿using Abstractions;
-using Common.Enums;
+using Utils.Enums;
 
 namespace Entities
 {
