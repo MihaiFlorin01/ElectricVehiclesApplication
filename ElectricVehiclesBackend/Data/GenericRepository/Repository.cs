@@ -35,6 +35,7 @@ namespace Data.GenericRepository
         public async Task<bool> DeleteByIdAsync(int id)
         {
             var entity = await GetByIdAsync(id);
+
             entity.IsDeleted = true;
 
             return _dbSet.Update(entity) is not null;
