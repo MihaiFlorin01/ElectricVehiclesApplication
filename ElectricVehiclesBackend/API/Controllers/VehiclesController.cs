@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Entities;
 using Abstractions;
 using System.Net.Mime;
+using MediatR;
+using CQRS.VehicleQueries;
+using CQRS.VehicleCommands;
 
 namespace API.Controllers
 {
@@ -11,13 +14,15 @@ namespace API.Controllers
     [ApiController]
     public class VehiclesController : ControllerBase
     {
+        private readonly IMediator _mediator;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public VehiclesController(IUnitOfWork unitOfWork, IMapper mapper)
+        public VehiclesController(IUnitOfWork unitOfWork, IMapper mapper, IMediator mediator)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [Consumes(MediaTypeNames.Application.Json)]
@@ -28,9 +33,9 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ViewVehicleDto>>> GetVehicles()
         {
-            var vehicles = await _unitOfWork.GetRepository<Vehicle>().GetAllAsync();
+            var vehicles = await _mediator.Send(new GetAllVehiclesQuery());
 
-            return Ok(_mapper.Map<IEnumerable<ViewVehicleDto>>(vehicles));
+            return Ok(vehicles);
         }
 
         [Consumes(MediaTypeNames.Application.Json)]
@@ -38,36 +43,37 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [HttpGet("{id}", Name = "GetVehicleById")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ViewVehicleDto>> GetVehicleById(int id)
         {
-            var vehicle = await _unitOfWork.GetRepository<Vehicle>().GetByIdAsync(id);
+            var vehicle = await _mediator.Send(new GetByIdVehicleQuery()
+            {
+                Id = id
+            });
 
             if (vehicle == null)
             {
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<ViewVehicleDto>(vehicle));
+            return Ok(vehicle);
         }
 
         [Consumes(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(typeof(ViewVehicleDto), 201)]
+        [ProducesResponseType(typeof(ViewVehicleDto), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<ActionResult<ViewVehicleDto>> AddVehicle(CreateVehicleDto createVehicleDto)
+        public async Task<IActionResult> AddVehicle(CreateVehicleDto createVehicleDto)
         {
-            var vehicleEntity = _mapper.Map<Vehicle>(createVehicleDto);
+            var result = await _mediator.Send(new CreateVehicleCommand()
+            {
+                Type = createVehicleDto.Type,
+                RegisterDate = createVehicleDto.RegisterDate,
+            });
 
-            _unitOfWork.GetRepository<Vehicle>().Add(vehicleEntity);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            var vehicleToReturn = _mapper.Map<ViewVehicleDto>(vehicleEntity);
-
-            return CreatedAtRoute("GetVehicleById", new {id = vehicleEntity.Id}, vehicleToReturn);
+            return Ok(result);
         }     
 
         [Consumes(MediaTypeNames.Application.Json)]

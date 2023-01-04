@@ -3,6 +3,7 @@ using Dtos.VehicleDtos;
 using Dtos.VehicleTypeDtos;
 using Dtos.UserDtos;
 using Entities;
+using CQRS.VehicleCommands;
 
 namespace Mappers
 {
@@ -13,6 +14,7 @@ namespace Mappers
             CreateMap<Vehicle, ViewVehicleDto>().ReverseMap();
             CreateMap<Vehicle, CreateVehicleDto>().ReverseMap();
             CreateMap<Vehicle, UpdateVehicleDto>().ReverseMap();
+            CreateMap<Vehicle, CreateVehicleCommand>().ReverseMap();
 
             CreateMap<VehicleType, ViewVehicleTypeDto>().ReverseMap();
             CreateMap<VehicleType, CreateVehicleTypeDto>().ReverseMap();
