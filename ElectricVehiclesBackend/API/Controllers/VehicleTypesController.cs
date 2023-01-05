@@ -96,7 +96,6 @@ namespace API.Controllers
             return Ok(vehicleTypeToReturn);
         }
 
-
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ViewVehicleTypeDto), 200)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -117,7 +116,6 @@ namespace API.Controllers
             await _unitOfWork.SaveChangesAsync();
 
             return Ok(_mapper.Map<ViewVehicleTypeDto>(vehicleType));
-
         }
     }
 }
