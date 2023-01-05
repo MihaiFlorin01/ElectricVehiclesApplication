@@ -31,7 +31,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ViewVehicleDto>>> GetVehicles()
+        public async Task<IActionResult> GetVehicles()
         {
             var vehicles = await _mediator.Send(new GetAllVehiclesQuery());
 
@@ -44,7 +44,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}")]
-        public async Task<ActionResult<ViewVehicleDto>> GetVehicleById(int id)
+        public async Task<IActionResult> GetVehicleById(int id)
         {
             var vehicle = await _mediator.Send(new GetByIdVehicleQuery()
             {
@@ -67,13 +67,13 @@ namespace API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddVehicle(CreateVehicleDto createVehicleDto)
         {
-            var result = await _mediator.Send(new CreateVehicleCommand()
+            var vehicle = await _mediator.Send(new CreateVehicleCommand()
             {
                 Type = createVehicleDto.Type,
                 RegisterDate = createVehicleDto.RegisterDate,
             });
 
-            return Ok(result);
+            return Ok(vehicle);
         }     
 
         [Consumes(MediaTypeNames.Application.Json)]
@@ -82,17 +82,16 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]   
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut]
-        public async Task<ActionResult<ViewVehicleDto>> UpdateVehicle(UpdateVehicleDto updateVehicleDto)
+        public async Task<IActionResult> UpdateVehicle(UpdateVehicleDto updateVehicleDto)
         {
-            var vehicleEntity = _mapper.Map<Vehicle>(updateVehicleDto);
-
-            _unitOfWork.GetRepository<Vehicle>().Update(vehicleEntity);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            var vehicleToReturn = _mapper.Map<ViewVehicleDto>(vehicleEntity);
-
-            return Ok(vehicleToReturn);
+            var vehicle = await _mediator.Send(new UpdateVehicleCommand()
+            {
+                Id = updateVehicleDto.Id,
+                Type = updateVehicleDto.Type,
+                RegisterDate = updateVehicleDto.RegisterDate,
+            });
+            
+            return Ok(vehicle);
         }
 
         [Consumes(MediaTypeNames.Application.Json)]
@@ -101,22 +100,14 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ViewVehicleDto>> DeleteVehicle(int id)
+        public async Task<IActionResult> DeleteVehicle(int id)
         {
-            var vehicleEntity = await _unitOfWork.GetRepository<Vehicle>().GetByIdAsync(id);
-
-            if (vehicleEntity == null)
+            var result = await _mediator.Send(new DeleteVehicleCommand()
             {
-                return NotFound();
-            }
+                Id = id,
+            });
 
-            await _unitOfWork.GetRepository<Vehicle>().DeleteByIdAsync(id);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            var vehicleToReturn = _mapper.Map<ViewVehicleDto>(vehicleEntity);
-
-            return Ok(vehicleToReturn);
+            return Ok(result);
         }
     }
 }

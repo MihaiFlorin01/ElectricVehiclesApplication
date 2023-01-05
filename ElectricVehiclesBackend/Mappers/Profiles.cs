@@ -15,6 +15,7 @@ namespace Mappers
             CreateMap<Vehicle, CreateVehicleDto>().ReverseMap();
             CreateMap<Vehicle, UpdateVehicleDto>().ReverseMap();
             CreateMap<Vehicle, CreateVehicleCommand>().ReverseMap();
+            CreateMap<Vehicle, UpdateVehicleCommand>().ReverseMap();
 
             CreateMap<VehicleType, ViewVehicleTypeDto>().ReverseMap();
             CreateMap<VehicleType, CreateVehicleTypeDto>().ReverseMap();

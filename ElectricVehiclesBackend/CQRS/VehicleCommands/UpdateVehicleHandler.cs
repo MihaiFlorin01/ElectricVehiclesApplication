@@ -3,30 +3,29 @@ using AutoMapper;
 using Dtos.VehicleDtos;
 using Entities;
 using MediatR;
-using System.Reflection.Metadata.Ecma335;
 
 namespace CQRS.VehicleCommands
 {
-    public class CreateVehicleHandler : IRequestHandler<CreateVehicleCommand, CreateVehicleDto>
+    public class UpdateVehicleHandler : IRequestHandler<UpdateVehicleCommand, UpdateVehicleDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CreateVehicleHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public UpdateVehicleHandler(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<CreateVehicleDto> Handle(CreateVehicleCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateVehicleDto> Handle(UpdateVehicleCommand request, CancellationToken cancellationToken)
         {
             var entityUnmapped = _mapper.Map<Vehicle>(request);
 
-            var entity = _unitOfWork.GetRepository<Vehicle>().Add(entityUnmapped);
+            var entity = _unitOfWork.GetRepository<Vehicle>().Update(entityUnmapped);
 
             await _unitOfWork.SaveChangesAsync();
 
-            var entityMapped = _mapper.Map<CreateVehicleDto>(entity);
+            var entityMapped = _mapper.Map<UpdateVehicleDto>(entity);
 
             return entityMapped;
         }
